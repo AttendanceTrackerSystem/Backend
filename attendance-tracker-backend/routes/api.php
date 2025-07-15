@@ -32,3 +32,9 @@ Route::get('/teachers/{id}', [TeacherController::class, 'show']); // Single teac
 use App\Http\Controllers\ClassController;
 
 Route::get('/classes', [ClassController::class, 'getClassesByDepartmentAndSubject']);
+
+
+use App\Http\Controllers\AttendanceController;
+Route::post('/submit_attendance', [AttendanceController::class, 'submitComment']);
+
+Route::get('/attendance/statistics', [AttendanceController::class, 'getAttendanceStatistics']);
