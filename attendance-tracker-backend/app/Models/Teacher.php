@@ -1,35 +1,32 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Teacher extends Authenticatable
+class Teacher extends Model
 {
-    protected $primaryKey = 'teacher_id';
-    public $incrementing = false;
-    protected $keyType = 'string';
+    protected $table = 'teachers';
+
+    protected $primaryKey = 'id'; // or 't_id' if custom PK
 
     protected $fillable = [
-        'teacher_id',
-        'teacher_name',
-        'email',
+        'teacher_email',
+        'name',
         'phone_number',
         'password',
         'department_id',
-        'subject_id',
     ];
 
-    protected $hidden = ['password'];
-
+    // Optional: Relationship with Department
     public function department()
     {
         return $this->belongsTo(Department::class);
     }
 
-    public function subject()
+    // Optional: Relationship with Classes
+    public function classes()
     {
-        return $this->belongsTo(Subject::class);
+        return $this->hasMany(Classes::class, 'teacher_id', 'id');
     }
-    
 }
