@@ -10,7 +10,6 @@ use App\Models\Subject;
 
 class StudentController extends Controller
 {
-    // Get student info by student number (or id)
     public function getStudent(Request $request, $studentNumber)
     {
         $student = Student::where('student_number', $studentNumber)->first();
@@ -22,14 +21,12 @@ class StudentController extends Controller
         return response()->json($student);
     }
 
-    // Get all departments (for dropdown)
     public function getDepartments()
     {
         $departments = Department::all();
-        return response()->json($departments);  // Return plain array for React
+        return response()->json($departments);  
     }
 
-    // Get subjects filtered by department_id query param
     public function getSubjects(Request $request)
     {
         $departmentId = $request->query('department_id');
@@ -39,10 +36,8 @@ class StudentController extends Controller
         }
 
         $subjects = Subject::where('department_id', $departmentId)->get();
-        return response()->json($subjects);  // Return plain array for React
+        return response()->json($subjects);  
     }
-
-    // Get subject details by id, including teacher and lectures
     public function getSubjectDetails($id)
     {
         $subject = Subject::with(['teacher', 'lectures'])->find($id);

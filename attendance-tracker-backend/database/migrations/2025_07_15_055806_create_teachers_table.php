@@ -9,7 +9,7 @@ class CreateTeachersTable extends Migration
     public function up()
     {
         Schema::create('teachers', function (Blueprint $table) {
-            $table->string('teacher_id')->primary(); // custom ID like 'Tea001'
+            $table->string('teacher_id')->primary(); 
             $table->string('teacher_name');
             $table->string('email')->unique();
             $table->string('phone_number');

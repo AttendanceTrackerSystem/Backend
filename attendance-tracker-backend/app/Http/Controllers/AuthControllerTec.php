@@ -1,10 +1,7 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use App\Models\Teacher;
-
 class AuthControllerTec extends Controller
 {
     public function login(Request $request)

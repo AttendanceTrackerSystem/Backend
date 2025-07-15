@@ -1,9 +1,7 @@
 <?php
-// app/Http/Controllers/AttendanceController.php
-
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\AttendanceRecord;
 
 class AttendanceController extends Controller
@@ -17,6 +15,7 @@ class AttendanceController extends Controller
             'rating' => 'nullable|integer|min:1|max:5',
             'date' => 'required|date',
         ]);
+
         $existing = AttendanceRecord::where('student_id', $validated['student_id'])
             ->where('class_id', $validated['class_id'])
             ->where('date', $validated['date'])
@@ -27,56 +26,38 @@ class AttendanceController extends Controller
         }
 
         try {
-    $record = AttendanceRecord::create([
-        'student_id' => $validated['student_id'],
-        'class_id' => $validated['class_id'],
-        'is_present' => true,
-        'rating' => $validated['rating'] ?? null,
-        'comment' => $validated['comment'] ?? null,
-        'date' => $validated['date'],
-    ]);
+            $record = AttendanceRecord::create([
+                'student_id' => $validated['student_id'],
+                'class_id' => $validated['class_id'],
+                'is_present' => true, 
+                'rating' => $validated['rating'] ?? null,
+                'comment' => $validated['comment'] ?? null,
+                'date' => $validated['date'],
+            ]);
 
-    return response()->json(['message' => 'Attendance submitted successfully', 'data' => $record], 201);
+            return response()->json(['message' => 'Attendance submitted successfully', 'data' => $record], 201);
 
-} catch (\Exception $e) {
-    \Log::error('Attendance submission failed: ' . $e->getMessage());
-    return response()->json(['message' => 'Internal Server Error'], 500);
-}
-
+        } catch (\Exception $e) {
+            \Log::error('Attendance submission failed: ' . $e->getMessage());
+            return response()->json(['message' => 'Internal Server Error'], 500);
+        }
     }
-}
 
- function getAttendanceStatistics(Request $request)
+  public function getAbsentStudents($classId)
 {
-    $classId = $request->query('class_id');
-    $subjectId = $request->query('subject_id');
-    $departmentId = $request->query('department_id');
+    $date = request()->query('date', now()->toDateString());
 
-    // Total students in subject + department
-    $totalStudents = StudentSubject::where('subject_id', $subjectId)
-                        ->whereHas('student', function ($query) use ($departmentId) {
-                            $query->where('dept_id', $departmentId);
-                        })->count();
+    $absentStudents = \DB::table('attendance_records')
+        ->join('students', 'attendance_records.student_id', '=', 'students.student_number') // Assuming students table and student_number key
+        ->select('students.student_number', 'students.full_name')
+        ->where('attendance_records.class_id', $classId)
+        ->where('attendance_records.date', $date)
+        ->where('attendance_records.is_present', 0)
+        ->get();
 
-    // Present count for the selected class
-    $presentCount = AttendanceRecord::where('class_id', $classId)
-                        ->where('is_present', true)
-                        ->count();
-
-    return response()->json([
-        'total_students' => $totalStudents,
-        'present_students' => $presentCount,
-        'attendance_percentage' => $totalStudents > 0 
-            ? round(($presentCount / $totalStudents) * 100, 2) 
-            : 0
-    ]);
+    return response()->json($absentStudents);
 }
 
 
-
-
-
-
-
-
+}
 

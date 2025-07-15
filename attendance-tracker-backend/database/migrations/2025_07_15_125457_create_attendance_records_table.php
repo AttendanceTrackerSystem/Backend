@@ -10,7 +10,7 @@ class CreateAttendanceRecordsTable extends Migration
     {
         Schema::create('attendance_records', function (Blueprint $table) {
         $table->id();
-        $table->string('student_id'); // fixed to match student_number
+        $table->string('student_id'); 
         $table->unsignedBigInteger('class_id');
         $table->boolean('is_present')->default(true);
         $table->tinyInteger('rating')->nullable();

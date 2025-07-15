@@ -1,7 +1,4 @@
 <?php
-
-// app/Http/Controllers/ClassController.php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
