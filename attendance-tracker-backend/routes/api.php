@@ -26,3 +26,9 @@ use App\Http\Controllers\TeacherController;
 
 Route::get('/teachers', [TeacherController::class, 'index']); // List all teachers
 Route::get('/teachers/{id}', [TeacherController::class, 'show']); // Single teacher detail
+
+
+
+use App\Http\Controllers\ClassController;
+
+Route::get('/classes', [ClassController::class, 'getClassesByDepartmentAndSubject']);
