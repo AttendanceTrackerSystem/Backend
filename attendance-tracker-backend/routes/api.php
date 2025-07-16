@@ -175,3 +175,4 @@ Route::middleware('api')->group(function () {
 
 
 Route::get('/teacher/class/{classId}/absent-students', [AttendanceController::class, 'getAbsentStudents']);
+Route::get('/present-students', [AttendanceController::class, 'getPresentStudents']);

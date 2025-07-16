@@ -57,7 +57,18 @@ class AttendanceController extends Controller
 
     return response()->json($absentStudents);
 }
+ public function getPresentStudents(Request $request)
+    {
+        $class_id = $request->query('class_id', 23);
+        $date = $request->query('date', '2025-07-15');
 
+        $students = AttendanceRecord::where('is_present', 1)
+            ->where('class_id', $class_id)
+            ->where('date', $date)
+            ->get(['student_id']);
+
+        return response()->json($students);
+    }
 
 }
 
