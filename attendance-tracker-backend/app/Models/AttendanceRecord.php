@@ -27,6 +27,8 @@ class AttendanceRecord extends Model
 
     public function class()
     {
-        return $this->belongsTo(ClassModel::class); // Replace with actual Class model if named differently
+        // return $this->belongsTo(ClassModel::class); 
+        return $this->belongsTo(\App\Models\ClassModel::class, 'class_id');
     }
+
 }

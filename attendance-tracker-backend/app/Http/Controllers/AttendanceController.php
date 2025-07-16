@@ -69,6 +69,15 @@ class AttendanceController extends Controller
 
         return response()->json($students);
     }
+public function getAttendanceByStudentId($student_id)
+    {
+        $records = AttendanceRecord::with(['class.teacher', 'class.subject'])
+            ->where('student_id', $student_id)
+            ->orderBy('date', 'desc')
+            ->get();
+
+        return response()->json($records);
+    }
 
 }
 
